@@ -2,8 +2,7 @@ package ar.unrn.tp.controllers;
 
 
 import ar.unrn.tp.api.MarcaService;
-import ar.unrn.tp.dto.ClienteDTO;
-import ar.unrn.tp.dto.MarcaDTO;
+import ar.unrn.tp.modelo.Marca;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,7 +24,7 @@ public class MarcaController {
 
     @PostMapping("/crear")
     @Operation(summary = "Agregar una marca")
-    public ResponseEntity<?> create(@RequestBody MarcaDTO marca) {
+    public ResponseEntity<?> create(@RequestBody Marca marca) {
         this.marcaService.crearMarca(marca.getNombre());
         return ResponseEntity.status(OK).body("La marca se añadió con éxito!");
     }

@@ -6,4 +6,9 @@ public class FechaInvalidaExcepcion extends Exception{
         super("La fechas deben ser validas");
     }
 
+    @Override
+    public String toString() {
+        return getMessage();
+    }
+
 }

@@ -1,7 +1,6 @@
 package ar.unrn.tp.jpa.servicios;
 
 import ar.unrn.tp.api.ClienteService;
-import ar.unrn.tp.dto.TarjetaDeCreditoDTO;
 import ar.unrn.tp.excepciones.ClienteInvalidoExcepcion;
 import ar.unrn.tp.excepciones.EmailInvalidoExcepcion;
 import ar.unrn.tp.modelo.Cliente;
@@ -58,16 +57,16 @@ public class ClienteServiceImpl extends GenericServiceImpl implements ClienteSer
     }
 
     @Override
-    public List<TarjetaDeCreditoDTO> listarTarjetas(Long idCliente) {
-        List<TarjetaDeCreditoDTO> tarjetaDTOS= new ArrayList<>();
+    public List<TarjetaDeCredito> listarTarjetas(Long idCliente) {
+        List<TarjetaDeCredito> tarjetaDTOS= new ArrayList<>();
         inTransactionExecute((em) -> {
             List<TarjetaDeCredito> tarjetas = new ArrayList<>();
             Cliente cliente=em.find(Cliente.class,idCliente);
-            tarjetas= cliente.tarjetasDeCredito();
-            for (TarjetaDeCredito t: tarjetas){
-                tarjetaDTOS.add(new TarjetaDeCreditoDTO(t.getId(),t.getNumero(),t.getNombre()));
-            }
+            tarjetas= cliente.getTarjetasDeCredito();
+            tarjetaDTOS.addAll(tarjetas);
         });
+
+
         return tarjetaDTOS;
     }
 

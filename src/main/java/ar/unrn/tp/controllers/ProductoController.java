@@ -1,8 +1,7 @@
 package ar.unrn.tp.controllers;
 
 import ar.unrn.tp.api.ProductoService;
-import ar.unrn.tp.dto.ClienteDTO;
-import ar.unrn.tp.dto.ProductoDTO;
+import ar.unrn.tp.modelo.ProductoDisponible;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +20,7 @@ public class ProductoController {
 
     @PostMapping("/crear")
     @Operation(summary = "Agregar un producto")
-    public ResponseEntity<?> create(@RequestBody ProductoDTO producto) {
+    public ResponseEntity<?> create(@RequestBody ProductoDisponible producto) {
         this.productoService.crearProducto(producto.getCodigo(),producto.getDescripcion(),producto.getPrecio(),producto.getCategoria().getId(),producto.getMarca().getId());
         return ResponseEntity.status(OK).body("El producto se añadió con éxito!");
     }

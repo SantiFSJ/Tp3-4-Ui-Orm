@@ -1,7 +1,7 @@
 package ar.unrn.tp.api;
 
-import ar.unrn.tp.dto.TarjetaDeCreditoDTO;
 import ar.unrn.tp.modelo.Cliente;
+import ar.unrn.tp.modelo.TarjetaDeCredito;
 
 import java.util.List;
 
@@ -15,7 +15,7 @@ public interface ClienteService {
     void agregarTarjeta(Long idCliente, String nro, String marca);
 
     //Devuelve las tarjetas de un cliente específico
-    List<TarjetaDeCreditoDTO> listarTarjetas(Long idCliente);
+    List<TarjetaDeCredito> listarTarjetas(Long idCliente);
 
     List<Cliente> listarClientes();
 

@@ -1,18 +1,16 @@
 package ar.unrn.tp.controllers;
 
 import ar.unrn.tp.api.VentaService;
-import ar.unrn.tp.dto.ClienteDTO;
-import ar.unrn.tp.dto.ProductoDTO;
-import ar.unrn.tp.dto.VentaDTO;
+import ar.unrn.tp.modelo.ProductoVendido;
+import ar.unrn.tp.modelo.Venta;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.http.HttpStatus;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.springframework.http.HttpStatus.OK;
 
@@ -28,13 +26,21 @@ public class VentaController {
 
     @PostMapping("/crear")
     @Operation(summary = "Agregar una venta")
-    public ResponseEntity<?> create(@RequestBody VentaDTO venta) {
+    public ResponseEntity<?> create(@RequestBody Venta venta) {
         List<Long> idList = new ArrayList<>();
-        for(ProductoDTO producto: venta.productoVendidos){
+        for(ProductoVendido producto: venta.getProductoVendidos()){
             idList.add(producto.getId());
         }
-        this.ventaService.realizarVenta(venta.cliente.id,idList,venta.tarjetaDeCredito.getId() );
-        return ResponseEntity.status(OK).body("La venta se realizó con éxito!");
+        this.ventaService.realizarVenta(venta.getCliente().getId(),idList,venta.getTarjetaDeCredito().getId() );
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
+
+    @PostMapping("/calcular-monto")
+    @Operation(summary = "Calcular el monto de una venta")
+    public ResponseEntity<?> calculateAmount(@RequestBody Venta venta) {
+        List<Long> productosIds = venta.getProductoVendidos().stream().map(ProductoVendido::getId).collect(Collectors.toList());
+        return ResponseEntity.status(OK).body(this.ventaService.calcularMonto(productosIds,venta.getTarjetaDeCredito().getId()));
+    }
+
 
 }

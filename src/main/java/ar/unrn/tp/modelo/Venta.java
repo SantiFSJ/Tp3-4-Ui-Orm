@@ -1,14 +1,19 @@
 package ar.unrn.tp.modelo;
 
 import ar.unrn.tp.excepciones.ProductoInvalidoExcepcion;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import jakarta.persistence.*;
+import lombok.Setter;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Getter
+@Setter
 @NoArgsConstructor
 public class Venta extends ModeloGenerico{
     LocalDateTime fechaYHora;

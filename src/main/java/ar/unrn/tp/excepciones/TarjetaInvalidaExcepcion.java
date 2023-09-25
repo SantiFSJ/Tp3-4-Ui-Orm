@@ -5,4 +5,9 @@ public class TarjetaInvalidaExcepcion extends Exception {
         super("La tarjeta debe ser valida");
     }
 
+    @Override
+    public String toString() {
+        return getMessage();
+    }
+
 }

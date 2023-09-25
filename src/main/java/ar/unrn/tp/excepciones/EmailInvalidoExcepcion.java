@@ -5,4 +5,9 @@ public class EmailInvalidoExcepcion extends Exception{
         super("El email debe ser valido");
     }
 
+    @Override
+    public String toString() {
+        return getMessage();
+    }
+
 }

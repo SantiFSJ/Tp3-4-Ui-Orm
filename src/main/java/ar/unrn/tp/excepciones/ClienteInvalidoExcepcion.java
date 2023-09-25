@@ -5,4 +5,9 @@ public class ClienteInvalidoExcepcion extends Exception{
         super("Los datos del cliente deben ser validos");
     }
 
+    @Override
+    public String toString() {
+        return getMessage();
+    }
+
 }

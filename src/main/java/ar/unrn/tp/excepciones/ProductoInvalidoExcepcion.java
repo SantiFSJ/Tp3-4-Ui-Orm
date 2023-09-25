@@ -5,4 +5,9 @@ public class ProductoInvalidoExcepcion extends Exception{
         super("Los datos de producto deben ser validos");
     }
 
+    @Override
+    public String toString() {
+        return getMessage();
+    }
+
 }

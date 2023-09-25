@@ -1,11 +1,18 @@
 package ar.unrn.tp.modelo;
 
 import ar.unrn.tp.excepciones.FechaInvalidaExcepcion;
+import jakarta.persistence.Entity;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDate;
 import java.util.List;
 
-
+@Entity
+@Getter
+@Setter
+@NoArgsConstructor
 public class DescuentoDeProducto extends Descuento {
 
     protected LocalDate fechaInicio;
