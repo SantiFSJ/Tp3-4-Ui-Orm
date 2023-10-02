@@ -25,6 +25,7 @@ public class Venta extends ModeloGenerico{
     @JoinColumn(name = "tarjeta_id")
     TarjetaDeCredito tarjetaDeCredito;
     double montoTotal;
+    String numero;
 
     public Venta(LocalDateTime fechaYHora, Cliente cliente, List<ProductoDisponible> productoVendidos, double montoTotal, TarjetaDeCredito tarjetaDeCredito) throws ProductoInvalidoExcepcion {
         this.fechaYHora = fechaYHora;

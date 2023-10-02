@@ -8,6 +8,8 @@ import ar.unrn.tp.modelo.*;
 
 import ar.unrn.tp.modelo.DescuentoDTO;
 import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.LockModeType;
+import jakarta.persistence.NoResultException;
 import jakarta.persistence.TypedQuery;
 import org.springframework.stereotype.Service;
 
@@ -67,12 +69,36 @@ public class VentaServiceImpl extends GenericServiceImpl implements VentaService
                 }
 
                 List<ProductoDisponible> listaProductos = em.createQuery("SELECT o FROM ProductoDisponible o WHERE o.id IN :ids", ProductoDisponible.class).setParameter("ids", productos).getResultList();
+
+                NumeroSiguiente nroSiguiente;
+
+                try {
+
+                    nroSiguiente = em.createQuery("SELECT n FROM NumeroSiguiente n", NumeroSiguiente.class).setLockMode(LockModeType.PESSIMISTIC_WRITE).getSingleResult();
+
+                    if(nroSiguiente.getAño() != LocalDate.now().getYear()){
+                        nroSiguiente = new NumeroSiguiente(0,LocalDate.now().getYear());
+                        em.persist(nroSiguiente);
+                    }
+
+                } catch (NoResultException e) {
+                    nroSiguiente = new NumeroSiguiente(0,LocalDate.now().getYear());
+                    em.persist(nroSiguiente);
+                }
+
+
+
                 try {
                     Venta venta = new Carrito(em.getReference(Cliente.class, idCliente), listaProductos, promociones, servicioValidadorTarjetas).realizarCompra(em.getReference(TarjetaDeCredito.class, idTarjeta));
+                    venta.setNumero(String.valueOf(nroSiguiente.recuperarSiguiente())+"-"+String.valueOf(nroSiguiente.getAño()));
                     em.persist(venta);
+                    em.persist(nroSiguiente);
                 } catch (TarjetaInvalidaExcepcion | ProductoInvalidoExcepcion e) {
                     throw new RuntimeException(e);
                 }
+
+
+
             }else {
                 throw new RuntimeException("La tarjeta no pertenece al cliente");
             }

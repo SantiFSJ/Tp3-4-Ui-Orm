@@ -31,4 +31,10 @@ public class ProductoController {
         return ResponseEntity.status(OK).body(this.productoService.listarProductos());
     }
 
+    @GetMapping("/listar/{id}")
+    @Operation(summary = "Hallar un producto en base a su id")
+    public ResponseEntity<?> findById(@PathVariable Long id) {
+        return ResponseEntity.status(OK).body(this.productoService.hallarProducto(id));
+    }
+
 }

@@ -1,8 +1,6 @@
 package ar.unrn.tp.jpa.servicios;
 
 import ar.unrn.tp.api.ProductoService;
-import ar.unrn.tp.excepciones.ClienteInvalidoExcepcion;
-import ar.unrn.tp.excepciones.EmailInvalidoExcepcion;
 import ar.unrn.tp.excepciones.ProductoInvalidoExcepcion;
 import ar.unrn.tp.modelo.*;
 
@@ -11,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
 @Service
 public class ProductoServiceImpl extends GenericServiceImpl implements ProductoService {
@@ -59,4 +58,14 @@ public class ProductoServiceImpl extends GenericServiceImpl implements ProductoS
         });
         return productos;
     }
+
+    public ProductoDisponible hallarProducto(Long idProducto){
+        AtomicReference<ProductoDisponible> producto = new AtomicReference<>();
+        inTransactionExecute((em) -> {
+            producto.set(em.find(ProductoDisponible.class, idProducto));
+
+        });
+        return producto.get();
+    }
+
 }

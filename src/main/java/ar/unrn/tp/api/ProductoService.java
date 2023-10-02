@@ -1,5 +1,7 @@
 package ar.unrn.tp.api;
 
+import ar.unrn.tp.modelo.ProductoDisponible;
+
 import java.util.List;
 
 public interface ProductoService {
@@ -11,5 +13,7 @@ public interface ProductoService {
     void modificarProducto(Long idProducto, String codigo, String descripcion, double precio, Long idCategoría, Long idMarca);
     //Devuelve todos los productos
     List listarProductos();
+
+    ProductoDisponible hallarProducto(Long idProducto);
 
 }
