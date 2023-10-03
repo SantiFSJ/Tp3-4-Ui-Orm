@@ -1,10 +1,12 @@
 package ar.unrn.tp.jpa.servicios;
 
 import ar.unrn.tp.api.ProductoService;
+import ar.unrn.tp.excepciones.BusinessException;
 import ar.unrn.tp.excepciones.ProductoInvalidoExcepcion;
 import ar.unrn.tp.modelo.*;
 
 import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.OptimisticLockException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -43,7 +45,13 @@ public class ProductoServiceImpl extends GenericServiceImpl implements ProductoS
                 producto.actualizarCategoria(categoria);
                 producto.actualizarMarca(marca);
                 producto.actualizarPrecio(precio);
-                em.persist(producto);
+
+                try{
+                    em.persist(producto);
+                }catch( OptimisticLockException e){
+                    throw new BusinessException("Ups! sucedió un error concurrente :(");
+                }
+
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }

@@ -29,6 +29,11 @@ public class ProductoController {
     @PutMapping("/actualizar")
     @Operation(summary = "Actualizar un producto")
     public ResponseEntity<?> update(@RequestBody ProductoDisponible producto) {
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
         this.productoService.modificarProducto(producto.getId(),producto.getCodigo(),producto.getDescripcion(),producto.getPrecio(),producto.getCategoria().getId(),producto.getMarca().getId());
         return ResponseEntity.status(HttpStatus.OK).build();
     }

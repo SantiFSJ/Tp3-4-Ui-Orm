@@ -23,6 +23,9 @@ public class ProductoDisponible extends ModeloGenerico {
     private Marca marca;
     private Double precio;
 
+    @Version
+    private Long version;
+
     public ProductoDisponible(String codigo, String descripcion, Categoria categoria, Marca marca, Double precio) throws RuntimeException, ProductoInvalidoExcepcion {
         this.validarProducto(codigo,descripcion,categoria,marca,precio);
         this.codigo = codigo;
