@@ -73,14 +73,9 @@ public class VentaServiceImpl extends GenericServiceImpl implements VentaService
                 NumeroSiguiente nroSiguiente;
 
                 try {
-                    nroSiguiente = em.createQuery("SELECT n FROM NumeroSiguiente n", NumeroSiguiente.class).setLockMode(LockModeType.PESSIMISTIC_WRITE).getSingleResult();
-                    if(nroSiguiente.getAño() != LocalDate.now().getYear()){
-                        nroSiguiente = new NumeroSiguiente(0,LocalDate.now().getYear());
-                        em.persist(nroSiguiente);
-                    }
+                    nroSiguiente = em.createQuery("SELECT n FROM NumeroSiguiente n WHERE año = :anioActual", NumeroSiguiente.class).setParameter("anioActual", LocalDate.now().getYear()).setLockMode(LockModeType.PESSIMISTIC_WRITE).getSingleResult();
                 } catch (NoResultException e) {
                     nroSiguiente = new NumeroSiguiente(0,LocalDate.now().getYear());
-                    em.persist(nroSiguiente);
                 }
 
                 try {
