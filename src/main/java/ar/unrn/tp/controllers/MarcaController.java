@@ -5,10 +5,7 @@ import ar.unrn.tp.api.MarcaService;
 import ar.unrn.tp.modelo.Marca;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import static org.springframework.http.HttpStatus.OK;
 
@@ -28,5 +25,12 @@ public class MarcaController {
         this.marcaService.crearMarca(marca.getNombre());
         return ResponseEntity.status(OK).body("La marca se añadió con éxito!");
     }
+
+    @GetMapping("/listar")
+    @Operation(summary = "Listar todos las marcas")
+    public ResponseEntity<?> findAll() {
+        return ResponseEntity.status(OK).body(this.marcaService.listar());
+    }
+
 
 }

@@ -3,6 +3,7 @@ package ar.unrn.tp.controllers;
 import ar.unrn.tp.api.ProductoService;
 import ar.unrn.tp.modelo.ProductoDisponible;
 import io.swagger.v3.oas.annotations.Operation;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,6 +24,13 @@ public class ProductoController {
     public ResponseEntity<?> create(@RequestBody ProductoDisponible producto) {
         this.productoService.crearProducto(producto.getCodigo(),producto.getDescripcion(),producto.getPrecio(),producto.getCategoria().getId(),producto.getMarca().getId());
         return ResponseEntity.status(OK).body("El producto se añadió con éxito!");
+    }
+
+    @PutMapping("/actualizar")
+    @Operation(summary = "Actualizar un producto")
+    public ResponseEntity<?> update(@RequestBody ProductoDisponible producto) {
+        this.productoService.modificarProducto(producto.getId(),producto.getCodigo(),producto.getDescripcion(),producto.getPrecio(),producto.getCategoria().getId(),producto.getMarca().getId());
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     @GetMapping("/listar")
