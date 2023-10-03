@@ -27,12 +27,13 @@ public class Venta extends ModeloGenerico{
     double montoTotal;
     String numero;
 
-    public Venta(LocalDateTime fechaYHora, Cliente cliente, List<ProductoDisponible> productoVendidos, double montoTotal, TarjetaDeCredito tarjetaDeCredito) throws ProductoInvalidoExcepcion {
+    public Venta(LocalDateTime fechaYHora, Cliente cliente, List<ProductoDisponible> productoVendidos, double montoTotal, TarjetaDeCredito tarjetaDeCredito, String numero) throws ProductoInvalidoExcepcion {
         this.fechaYHora = fechaYHora;
         this.cliente = cliente;
         this.productoVendidos = new ArrayList<ProductoVendido>();
         this.montoTotal = montoTotal;
         this.tarjetaDeCredito = tarjetaDeCredito;
+        this.numero = numero;
         this.parseProductos(productoVendidos);
     }
 

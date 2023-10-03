@@ -84,8 +84,7 @@ public class VentaServiceImpl extends GenericServiceImpl implements VentaService
                 }
 
                 try {
-                    Venta venta = new Carrito(em.getReference(Cliente.class, idCliente), listaProductos, promociones, servicioValidadorTarjetas).realizarCompra(em.getReference(TarjetaDeCredito.class, idTarjeta));
-                    venta.setNumero(String.valueOf(nroSiguiente.recuperarSiguiente())+"-"+String.valueOf(nroSiguiente.getAño()));
+                    Venta venta = new Carrito(em.getReference(Cliente.class, idCliente), listaProductos, promociones, servicioValidadorTarjetas).realizarCompra(em.getReference(TarjetaDeCredito.class, idTarjeta),String.valueOf(nroSiguiente.recuperarSiguiente())+"-"+String.valueOf(nroSiguiente.getAño()));
                     em.persist(venta);
                     em.persist(nroSiguiente);
                 } catch (TarjetaInvalidaExcepcion | ProductoInvalidoExcepcion e) {

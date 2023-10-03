@@ -41,9 +41,9 @@ public class Carrito {
         return montoTotal;
 
     }
-    public Venta realizarCompra(TarjetaDeCredito tarjeta) throws TarjetaInvalidaExcepcion, ProductoInvalidoExcepcion {
+    public Venta realizarCompra(TarjetaDeCredito tarjeta, String numeroDeVenta) throws TarjetaInvalidaExcepcion, ProductoInvalidoExcepcion {
         if(this.servicioTarjetas.validar(tarjeta))
-            return new Venta(LocalDateTime.now(),this.cliente,this.productos,calcularMontoConDescuentos(tarjeta), tarjeta);
+            return new Venta(LocalDateTime.now(),this.cliente,this.productos,calcularMontoConDescuentos(tarjeta), tarjeta, numeroDeVenta);
         else
             throw new TarjetaInvalidaExcepcion();
 
