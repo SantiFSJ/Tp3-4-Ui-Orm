@@ -34,7 +34,7 @@ public class ProductoController {
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-        this.productoService.modificarProducto(producto.getId(),producto.getCodigo(),producto.getDescripcion(),producto.getPrecio(),producto.getCategoria().getId(),producto.getMarca().getId());
+        this.productoService.modificarProducto(producto.getId(),producto.getCodigo(),producto.getDescripcion(),producto.getPrecio(),producto.getCategoria().getId(),producto.getMarca().getId(),producto.getVersion());
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 

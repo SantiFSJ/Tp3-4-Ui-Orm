@@ -34,27 +34,29 @@ public class ProductoServiceImpl extends GenericServiceImpl implements ProductoS
     }
 
     @Override
-    public void modificarProducto(Long idProducto, String codigo, String descripcion, double precio, Long idCategoría, Long idMarca) {
+    public void modificarProducto(Long idProducto, String codigo, String descripcion, double precio, Long idCategoría, Long idMarca, Long version) {
         inTransactionExecute((em) -> {
-            try {
-                Marca marca = em.getReference(Marca.class, idMarca);
-                Categoria categoria = em.getReference(Categoria.class, idCategoría);
-                ProductoDisponible producto = em.getReference(ProductoDisponible.class, idProducto);
-                producto.actualizarDescripcion(descripcion);
-                producto.actualizarCodigo(codigo);
-                producto.actualizarCategoria(categoria);
-                producto.actualizarMarca(marca);
-                producto.actualizarPrecio(precio);
-
                 try{
+                    Marca marca = em.getReference(Marca.class, idMarca);
+                    Categoria categoria = em.getReference(Categoria.class, idCategoría);
+                    ProductoDisponible producto = em.find(ProductoDisponible.class, idProducto);
+                    if(!version.equals(producto.getVersion())) {
+                        throw new OptimisticLockException();
+                    }
+
+                    producto.actualizarDescripcion(descripcion);
+                    producto.actualizarCodigo(codigo);
+                    producto.actualizarCategoria(categoria);
+                    producto.actualizarMarca(marca);
+                    producto.actualizarPrecio(precio);
+
                     em.persist(producto);
-                }catch( OptimisticLockException e){
-                    throw new BusinessException("Ups! sucedió un error concurrente :(");
+                }catch (OptimisticLockException o) {
+                    throw new RuntimeException("Error de concurrencia: El producto ha sido modificado por otro usuario.");
+                } catch(Exception e){
+                    throw new RuntimeException("Ups! sucedió un error concurrente :(");
                 }
 
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
         });
     }
 

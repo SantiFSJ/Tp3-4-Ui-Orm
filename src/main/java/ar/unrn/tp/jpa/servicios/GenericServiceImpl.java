@@ -30,6 +30,7 @@ public abstract class GenericServiceImpl {
 
         } catch (Exception e) {
             tx.rollback();
+            e.printStackTrace();
             throw e;
         } finally {
             if (em != null && em.isOpen())

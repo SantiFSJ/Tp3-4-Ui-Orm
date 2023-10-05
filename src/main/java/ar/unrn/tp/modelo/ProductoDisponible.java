@@ -34,6 +34,16 @@ public class ProductoDisponible extends ModeloGenerico {
         this.marca = marca;
         this.precio = precio;
     }
+
+    public ProductoDisponible(String codigo, String descripcion, Categoria categoria, Marca marca, Double precio, Long version) throws RuntimeException, ProductoInvalidoExcepcion {
+        this.validarProducto(codigo,descripcion,categoria,marca,precio);
+        this.codigo = codigo;
+        this.descripcion = descripcion;
+        this.categoria = categoria;
+        this.marca = marca;
+        this.precio = precio;
+        this.version = version;
+    }
     private void validarProducto(String codigo, String descripcion, Categoria categoria, Marca marca, Double precio) throws RuntimeException, ProductoInvalidoExcepcion {
         if(codigo == null
                 || codigo.equals("")
