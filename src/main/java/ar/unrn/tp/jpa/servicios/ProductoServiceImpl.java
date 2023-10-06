@@ -52,9 +52,9 @@ public class ProductoServiceImpl extends GenericServiceImpl implements ProductoS
 
                     em.persist(producto);
                 }catch (OptimisticLockException o) {
-                    throw new RuntimeException("Error de concurrencia: El producto ha sido modificado por otro usuario.");
-                } catch(Exception e){
                     throw new RuntimeException("Ups! sucedió un error concurrente :(");
+                } catch(Exception e){
+                    throw new RuntimeException("Ups! sucedió un error al actualizar el producto :(");
                 }
 
         });
