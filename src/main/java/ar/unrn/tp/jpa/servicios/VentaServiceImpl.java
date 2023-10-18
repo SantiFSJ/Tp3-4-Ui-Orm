@@ -1,5 +1,6 @@
 package ar.unrn.tp.jpa.servicios;
 
+import ar.unrn.tp.api.CacheVentaService;
 import ar.unrn.tp.api.DescuentoService;
 import ar.unrn.tp.api.VentaService;
 import ar.unrn.tp.excepciones.ProductoInvalidoExcepcion;
@@ -23,19 +24,19 @@ public class VentaServiceImpl extends GenericServiceImpl implements VentaService
 
     private ServicioValidadorDeTarjetas servicioValidadorTarjetas;
 
+    private CacheVentaService cacheVentaService;
+
     private DescuentoService descuentoService;
 
-    public VentaServiceImpl(ServicioValidadorDeTarjetas servicioValidadorTarjetas, DescuentoService descuentoService, EntityManagerFactory emf){
+    public VentaServiceImpl(CacheVentaService cacheVentaService, ServicioValidadorDeTarjetas servicioValidadorTarjetas, DescuentoService descuentoService, EntityManagerFactory emf){
         super(emf);
         this.descuentoService = descuentoService;
         this.servicioValidadorTarjetas = servicioValidadorTarjetas;
+        this.cacheVentaService = cacheVentaService;
     }
     @Override
     public void realizarVenta(Long idCliente, List<Long> productos, Long idTarjeta) {
         inTransactionExecute((em) -> {
-
-
-
             Cliente cliente = em.find(Cliente.class,idCliente);
             TarjetaDeCredito tarjeta = em.find(TarjetaDeCredito.class,idTarjeta);
             if (cliente == null) {
@@ -82,6 +83,7 @@ public class VentaServiceImpl extends GenericServiceImpl implements VentaService
                     Venta venta = new Carrito(em.getReference(Cliente.class, idCliente), listaProductos, promociones, servicioValidadorTarjetas).realizarCompra(em.getReference(TarjetaDeCredito.class, idTarjeta),String.valueOf(nroSiguiente.recuperarSiguiente())+"-"+String.valueOf(nroSiguiente.getAño()));
                     em.persist(venta);
                     em.persist(nroSiguiente);
+                    this.cacheVentaService.limpiarCache(idCliente);
                 } catch (TarjetaInvalidaExcepcion | ProductoInvalidoExcepcion e) {
                     throw new RuntimeException(e);
                 }
@@ -129,4 +131,19 @@ public class VentaServiceImpl extends GenericServiceImpl implements VentaService
         });
         return ventas;
     }
+
+    public List<Venta> ventasRecientesDeCliente(Long idCliente){
+        List<Venta> ventas = new ArrayList<>();
+        List<Venta> ventasCacheadas = new ArrayList<>();
+
+        ventasCacheadas = this.cacheVentaService.listarVentasDeUnCliente(idCliente);
+        if(ventasCacheadas.size() > 0)
+            return ventasCacheadas;
+        inTransactionExecute((em) -> {
+            ventas.addAll(em.createQuery("SELECT v FROM Venta v", Venta.class).getResultList());
+        });
+        this.cacheVentaService.persistirUltimasVentas(ventas, idCliente);
+        return ventas;
+    }
+
 }

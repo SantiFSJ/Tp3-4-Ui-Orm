@@ -13,4 +13,7 @@ public interface VentaService {
     float calcularMonto(List<Long> productos, Long idTarjeta);
     //Devuelve todas las ventas realizadas
     List ventas();
+
+    List ventasRecientesDeCliente(Long idCliente);
+
 }

@@ -42,5 +42,11 @@ public class VentaController {
         return ResponseEntity.status(OK).body(this.ventaService.calcularMonto(productosIds,venta.getTarjetaDeCredito().getId()));
     }
 
+    @GetMapping("/listar/{idCliente}")
+    @Operation(summary = "Listar las ventas recientes de un cliente")
+    public ResponseEntity<?> findAllRecent(@PathVariable Long idCliente) {
+        return ResponseEntity.status(OK).body(this.ventaService.ventasRecientesDeCliente(idCliente));
+    }
+
 
 }
