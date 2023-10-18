@@ -4,6 +4,7 @@ import ar.unrn.tp.api.CacheVentaService;
 import ar.unrn.tp.modelo.Venta;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.stereotype.Service;
 import redis.clients.jedis.Jedis;
 
@@ -31,7 +32,7 @@ public class CacheVentaServiceImpl implements CacheVentaService{
     @Override
     public void persistirUltimasVentas(List<Venta> ventas, Long idCliente) {
         this.setUpJedis();
-        ObjectMapper objectMapper = new ObjectMapper();
+        ObjectMapper objectMapper = new ObjectMapper().registerModule(new JavaTimeModule());
         for(Venta venta: ventas){
             try {
                 String ventaJson = objectMapper.writeValueAsString(venta);
@@ -54,7 +55,7 @@ public class CacheVentaServiceImpl implements CacheVentaService{
     @Override
     public List<Venta> listarVentasDeUnCliente(Long idCliente) {
         this.setUpJedis();
-        ObjectMapper objectMapper = new ObjectMapper();
+        ObjectMapper objectMapper = new ObjectMapper().registerModule(new JavaTimeModule());;
         List<String> ventasJson = this.jedis.lrange("cliente:" + idCliente.toString() + ":ventas", 0, -1);
         List<Venta> ventas = new ArrayList<>();
         for (String ventaJson : ventasJson) {

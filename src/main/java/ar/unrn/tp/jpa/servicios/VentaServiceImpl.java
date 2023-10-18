@@ -140,7 +140,7 @@ public class VentaServiceImpl extends GenericServiceImpl implements VentaService
         if(ventasCacheadas.size() > 0)
             return ventasCacheadas;
         inTransactionExecute((em) -> {
-            ventas.addAll(em.createQuery("SELECT v FROM Venta v", Venta.class).getResultList());
+            ventas.addAll(em.createQuery("SELECT v FROM Venta v JOIN FETCH v.productoVendidos WHERE v.cliente.id = :idCliente ORDER BY v.fechaYHora LIMIT 3", Venta.class).setParameter("idCliente", idCliente).getResultList());
         });
         this.cacheVentaService.persistirUltimasVentas(ventas, idCliente);
         return ventas;
